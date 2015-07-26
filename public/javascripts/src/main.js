@@ -58,6 +58,8 @@ class App extends React.Component {
 
 		return (
 		  <main style={styles.main}>
+				<form>
+				</form>
 				<section>
 					<ul>{userList}</ul>
 				</section>

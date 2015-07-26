@@ -51,6 +51,12 @@ app.get("/users", function(req, res) {
   res.json(users);
 });
 
+app.post("/users/new", function(req, res) {
+  console.info("User create request");
+  console.info("req.params:", req.params)
+  res.send("YAWHOL")
+});
+
 var server = app.listen(1337, function() {
   var port = server.address().port;
   console.log('Awesomeness is running on port:', port);
