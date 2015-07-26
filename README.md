@@ -1,4 +1,5 @@
 # Vanilla Flux Implementation
+**authors:** Gregory Tandiono & Max Lin
 
 This is a working example of vanilla flux using browserify (with babel transforms, shims, flowtype), es6, and flowtype (typed javascript). This project also includes batteries (a fake express server with faker)
 
