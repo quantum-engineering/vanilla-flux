@@ -23,17 +23,20 @@ export const UserActions = {
 				})
 			})
 	},
-	create(user) {
+	create(payload) {
 		AppDispatcher.dispatch({
 			actionType: UserConstants.USER_CREATE,
 			loading: true
 		})
+		console.info("sending payload", payload)
 		request
 			.post("/users/new")
+			.send(payload)
 			.end(function(err, res) {
 				AppDispatcher.dispatch({
 					actionType: UserConstants.USER_CREATE_COMPLETE,
-					updatedUserList: res.body
+					loading: false,
+					newUser: payload
 				})
 			})
 	}

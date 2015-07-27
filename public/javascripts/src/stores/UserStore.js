@@ -16,6 +16,16 @@ let _users = []
 
 function update(data) {
 	return _users = data
+	// _users.push(data)
+	// let flatten = _users.reduce(function(a, b) {
+	// 	return a.concat(b)
+	// })
+	// return flatten
+}
+
+function create(user): void {
+	console.info("CREATE")
+	return _users.push(user)
 }
 
 export const UserStore = assign({}, EventEmitter.prototype, {
@@ -25,7 +35,6 @@ export const UserStore = assign({}, EventEmitter.prototype, {
 	 */
 
 	loadUsers: function(payload) {
-		console.info("load users triggered", payload)
 		return _users
 		this.emitChange()
 	},
@@ -52,16 +61,32 @@ export const UserStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 	var users;
 	switch(action.actionType) {
+
 		case UserConstants.USER_LOAD:
 			console.info("LOAD USER TRIGGERED", action);
 			update(action.users)
 			UserStore.emitChange();
 			break;
+
 		case UserConstants.USER_LOAD_COMPLETE:
 			console.info("LOAD COMPLETE", action)
 			update(action.users)
 			UserStore.emitChange()
 			break;
+
+		case UserConstants.USER_CREATE:
+			console.info("CREATE USER TRIGGERED", action)
+			UserStore.emitChange()
+			break;
+
+		case UserConstants.USER_CREATE_COMPLETE:
+			console.info("CREATE USER COMPLETE", action)
+			// update(action.newUser)
+			create(action.newUser)
+			UserStore.emitChange()
+			break;
+
 		default:
+		// no op
 	}
 })

@@ -5,6 +5,7 @@
 
 import React from "react/addons"
 import request from "superagent"
+import uuid from "node-uuid"
 import {UserStore} from "./stores/UserStore"
 import {UserActions} from "./actions/UserActions"
 
@@ -52,19 +53,51 @@ class App extends React.Component {
 		let users = this.state.users
 		let userList = [];
 
+		console.info("user state", users)
+
 		users.map(function(user) {
 			userList.push(this._generateUserList(user))
 		}.bind(this))
 
 		return (
 		  <main style={styles.main}>
-				<form>
-				</form>
 				<section>
 					<ul>{userList}</ul>
 				</section>
+				<form onSubmit={this._onSubmit.bind(this)}>
+
+					<div>
+						<label>Name</label>
+						<input ref="name" />
+					</div>
+
+					<div>
+						<label>Email</label>
+						<input ref="email" type="email" />
+					</div>
+
+					<div>
+						<label>Avatar (Valid img url)</label>
+						<input ref="avatar" />
+					</div>
+
+					<button type="submit">Create User</button>
+
+				</form>
 		  </main>
 		)
+	}
+	_onSubmit(e) {
+		e.preventDefault()
+		let name = React.findDOMNode(this.refs.name).value
+		let email = React.findDOMNode(this.refs.email).value
+		let avatar = React.findDOMNode(this.refs.avatar).value
+		let id = uuid.v4()
+
+		let userFormData = {name, email, avatar, id}
+
+		UserActions.create(userFormData)
+
 	}
 	_onChange() {
 		this.setState({users: UserStore.loadUsers()})

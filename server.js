@@ -48,13 +48,16 @@ app.get("/", function(req, res) {
 
 app.get("/users", function(req, res) {
   console.info("OK got users");
+  console.info("number of users:", users.length)
   res.json(users);
 });
 
 app.post("/users/new", function(req, res) {
-  console.info("User create request");
-  console.info("req.params:", req.params)
-  res.send("YAWHOL")
+  // console.info("User create request");
+  // console.info("req.params:", req.body)
+  users.push(req.body)
+  console.info("number of users after:", users.length)
+  res.send("All good!")
 });
 
 var server = app.listen(1337, function() {
