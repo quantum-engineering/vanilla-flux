@@ -41,9 +41,10 @@ This is still a working build without tests, if you find the nomenclature a bit 
 ## Roadmap
 
 - [x] Ability to Get Users
-- [ ] Ability to Create Users
+- [x] Ability to Create Users
 - [ ] Ability to Update Users
 - [ ] Ability to Destroy Users
+- [ ] Add Create Users Client Exception Handling
 - [ ] Write tests
 - [ ] Implement the same flux logic in a react native ecosystem
 - [ ] Implement Sockets.. (maybe?)
