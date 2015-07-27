@@ -53,8 +53,6 @@ app.get("/users", function(req, res) {
 });
 
 app.post("/users/new", function(req, res) {
-  // console.info("User create request");
-  // console.info("req.params:", req.body)
   users.push(req.body)
   console.info("number of users after:", users.length)
   res.send("All good!")

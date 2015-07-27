@@ -14,7 +14,7 @@ let CHANGE_EVENT = "change"
 
 let _users = []
 
-function update(data) {
+function update(data): void {
 	return _users = data
 	// _users.push(data)
 	// let flatten = _users.reduce(function(a, b) {
@@ -63,9 +63,9 @@ AppDispatcher.register(function(action) {
 	switch(action.actionType) {
 
 		case UserConstants.USER_LOAD:
-			console.info("LOAD USER TRIGGERED", action);
+			console.info("LOAD USER TRIGGERED", action)
 			update(action.users)
-			UserStore.emitChange();
+			UserStore.emitChange()
 			break;
 
 		case UserConstants.USER_LOAD_COMPLETE:
