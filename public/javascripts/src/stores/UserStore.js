@@ -6,9 +6,9 @@
 import AppDispatcher from "../dispatcher/AppDispatcher" // notice we don't use the braces, because it's a class import
 import {UserConstants} from "../constants/UserConstants"
 import assign from "object-assign"
-import events from "events"
+import {EventEmitter} from "events"
 
-let EventEmitter = events.EventEmitter
+// let EventEmitter = events.EventEmitter
 
 let CHANGE_EVENT = "change"
 
@@ -16,11 +16,6 @@ let _users = []
 
 function update(data): void {
 	return _users = data
-	// _users.push(data)
-	// let flatten = _users.reduce(function(a, b) {
-	// 	return a.concat(b)
-	// })
-	// return flatten
 }
 
 function create(user): void {
