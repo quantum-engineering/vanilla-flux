@@ -41,14 +41,17 @@ class App extends React.Component {
 			users: UserStore.loadUsers()
 		}
 	}
+
 	componentDidMount() {
 		UserActions.get(); // trigger the get action to get the ball rolling
 		UserStore.addChangeListener(this._onChange.bind(this));
 	}
+
 	componentWillUnmount() {
 		console.info("will unmount here")
 		UserStore.removeChangeListener(this._onChange.bind(this));
 	}
+
 	render() {
 		let users = this.state.users
 		let userList = [];
@@ -87,6 +90,7 @@ class App extends React.Component {
 		  </main>
 		)
 	}
+
 	_onSubmit(e) {
 		e.preventDefault()
 		let name = React.findDOMNode(this.refs.name).value
@@ -99,9 +103,11 @@ class App extends React.Component {
 		UserActions.create(userFormData)
 
 	}
+
 	_onChange() {
 		this.setState({users: UserStore.loadUsers()})
 	}
+
 	_generateUserList(user: User) { // Using interface
 		return (
 			<li key={user.id}>
@@ -118,10 +124,14 @@ class App extends React.Component {
 	}
 }
 
-function calculation(a: number, b: number): number {
-	return a + b;
-}
+/**
+ * Yeah don't need this anymore
+ */
 
-var x: number = calculation(2, 3)
+// function calculation(a: number, b: number): number {
+// 	return a + b;
+// }
+//
+// var x: number = calculation(2, 3)
 
 React.render(<App />, document.getElementById("main"))
