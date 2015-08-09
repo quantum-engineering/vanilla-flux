@@ -1,0 +1,45 @@
+/**
+ * main.css
+ * using CSSNEXT
+ * visit http://cssnext.io for reference
+ */
+
+:root {
+  --font-master: "Helvetica";
+  --font-size-base: 1rem;
+  --main-color: #d3d3d3;
+  --heading-size-h1: 2rem;
+}
+
+@custom-selector :--headings h1, h2, h3, h4, h5, h6;
+@custom-selector :--button button, .button;
+@custom-selector :--enter :hover, :focus;
+@custom-media --small-viewport (width >= 320px) and (width <= 768px);
+
+@media (--small-viewport) {
+
+}
+
+main {
+  margin-left: 200px;
+}
+
+header {
+  position: fixed;
+  height: 100%;
+  background-color: #5f5f5f;
+  top: 0;
+  width: 170px;
+}
+
+header ul {
+  padding-top: 25px;
+}
+
+body {
+  font-family: var(--font-master);
+}
+
+:--headings {
+  color: var(--main-color);
+}

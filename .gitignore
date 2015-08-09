@@ -2,4 +2,5 @@ node_modules
 public/javascripts/dist
 public/javascripts/bundle.js
 public/javascripts/shims.bundle.js
+public/stylesheets/bundle.output.css
 .DS_Store
