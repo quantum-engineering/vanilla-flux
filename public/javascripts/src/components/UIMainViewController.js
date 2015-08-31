@@ -5,9 +5,11 @@
 
 import type Immutable from 'immutable';
 import type {Store} from 'flux/utils';
-import type User from '../data-records/User';
 import {Container} from 'flux/utils';
 import React, {Component} from 'react';
+import _ from "underscore-contrib";
+
+import type User from '../data-records/User';
 import UserStore from '../stores/PerformanceUserStore';
 import {dispatch} from '../dispatcher/PerformanceAppDispatcher';
 
@@ -44,21 +46,23 @@ class TextInput extends Component {
     }
   }
 
+  componentDidMount() {
+    var el = React.finDOMNode(this.refs.input)
+  }
+
   render() {
     return (
       <div className="input-group">
         <label style={{display: "block"}}>{this.props.label}</label>
         <input
           type="text"
-          value={this.state.value}
+          value={this.props.value}
           name={this.props.name}
-          onChange={this._onChange.bind(this)} />
+          onBlur={this.props.onBlur}
+          ref="input"
+          onChange={this.props.onChange} />
       </div>
     )
-  }
-
-  _onChange(e) {
-    this.setState({value: e.target.value})
   }
 }
 
@@ -66,18 +70,29 @@ class MainSection extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: "",
-      email: "",
-      avatar: ""
+      name: this.props.users.get("name"),
+      email: this.props.users.get("email"),
+      avatar: this.props.users.get("avatar")
     }
   }
 
   render(): ?ReactElement {
-    let formInputs: Array<Object> = [
-      {label: "Name", ref: "name", name: "name", value: this.state.name},
-      {label: "Email", ref: "email", name: "email", value: this.state.email},
-      {label: "Avatar", ref: "avatar", name: "avatar", value: this.state.avatar}
+    let inputs: Array<Object> = [
+      {label: "Name", ref: "name", name: "name", type: "required", value: this.state.name},
+      {label: "Email", ref: "email", name: "email", type: "required", value: this.state.email},
+      {label: "Avatar", ref: "avatar", name: "avatar", type: "required", value: this.state.avatar}
     ];
+
+    let formInputs = [];
+    inputs.map((input, index) => {
+      formInputs.push(
+        <TextInput
+          key={index}
+          label={input.label}
+          value={input.value}
+          onChange={this._onChange(input.name)} />
+      )
+    })
 
     const userList = [];
     for (let [id, user] of this.props.users) {
@@ -100,19 +115,7 @@ class MainSection extends Component {
           </ul>
         </div>
         <form onSubmit={this._onSubmit.bind(this)}>
-
-          {formInputs.map((input) => {
-            return (
-              <div className="form-group">
-                <label style={{display: "block"}}>{input.label}</label>
-                <input
-                  type="text"
-                  value={input.value}
-                  onChange={this._onChange(input.name)} />
-              </div>
-            )
-          })}
-
+          {formInputs}
           <button type="submit">Submit</button>
         </form>
       </section>
@@ -121,13 +124,13 @@ class MainSection extends Component {
 
   _onSubmit(e) {
     e.preventDefault()
-    const {user} = this.state;
     dispatch({
       type: "user/create",
       avatar: this.state.avatar,
       email: this.state.email,
       name: this.state.name
     });
+    this.setState({avatar: "", email: "", name: ""})
   }
 
   _onChange(key) {
