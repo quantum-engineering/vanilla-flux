@@ -3,11 +3,14 @@
  * @flow
  */
 
-import React from "react/addons"
+import React, {Component, PropTypes} from "react/addons"
 import request from "superagent"
 import uuid from "node-uuid"
 import {UserStore} from "./stores/UserStore"
 import {UserActions} from "./actions/UserActions"
+import Immutable from "immutable"
+
+import UIMainViewController from "./components/UIMainViewController"
 
 
 // Using flowtype
@@ -124,6 +127,15 @@ class App extends React.Component {
 	}
 }
 
+class PerformanceMeasurementApp extends Component {
+	render() {
+		return (
+			<main></main>
+		)
+	}
+}
+
+
 /**
  * Yeah don't need this anymore
  */
@@ -134,4 +146,4 @@ class App extends React.Component {
 //
 // var x: number = calculation(2, 3)
 
-React.render(<App />, document.getElementById("main"))
+React.render(<UIMainViewController />, document.getElementById("main"))
