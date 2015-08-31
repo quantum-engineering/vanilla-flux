@@ -8,6 +8,7 @@ import type {Store} from 'flux/utils';
 import {Container} from 'flux/utils';
 import React, {Component} from 'react';
 import _ from "underscore-contrib";
+import assign from "object-assign";
 
 import type User from '../data-records/User';
 import UserStore from '../stores/PerformanceUserStore';
@@ -38,35 +39,15 @@ class UIMainViewController extends Component<{}, {}, State> {
   }
 }
 
-class TextInput extends Component {
+class Validator extends Component {
   constructor(props) {
     super(props)
     this.state = {
       value: this.props.value || "",
       errorStyle: "",
       errorMsg: "",
-      isValid: this.props.isValid
+      isValid: false
     }
-  }
-
-  render() {
-    var errorMsg;
-    if (this.state.errorMsg) {
-      errorMsg = <div>{this.state.errorMsg}</div>
-    }
-    return (
-      <div className="input-group">
-        <label style={{display: "block"}}>{this.props.label}</label>
-        <input
-          style={{"borderColor": this.state.errorStyle}}
-          type="text"
-          value={this.props.value}
-          name={this.props.name}
-          onBlur={this._validate.bind(this)}
-          onChange={this.props.onChange.bind(this)} />
-        {errorMsg}
-      </div>
-    )
   }
 
   _validate(e) {
@@ -79,6 +60,7 @@ class TextInput extends Component {
             isValid: false
           })
         } else {
+          console.info(this.state)
           this.setState({errorStyle: "", errorMsg: "", isValid: true})
         }
       break;
@@ -96,19 +78,42 @@ class TextInput extends Component {
       default:
         this.setState({errorStyle: "", errorMsg: "", isValid: true})
     }
+
+  }
+}
+
+class TextInput extends Validator {
+  render() {
+    var errorMsg;
+    if (this.state.errorMsg) {
+      errorMsg = <div>{this.state.errorMsg}</div>
+    }
+    return (
+      <div className="input-group">
+        <label style={{display: "block"}}>{this.props.label}</label>
+        <input
+          style={{"borderColor": this.state.errorStyle}}
+          type="text"
+          value={this.props.value}
+          name={this.props.name}
+          // onBlur={this._validate.bind(this)}
+          onChange={this.props.onChange} />
+        {errorMsg}
+      </div>
+    )
   }
 
 }
 
-class MainSection extends Component {
+class MainSection extends Validator {
   constructor(props) {
     super(props)
-    this.state = {
+    console.info(this.state)
+    this.state = assign({}, this.state, {
       name: this.props.users.get("name"),
       email: this.props.users.get("email"),
       avatar: this.props.users.get("avatar"),
-      isValid: false,
-    }
+    })
   }
 
   render(): ?ReactElement {
