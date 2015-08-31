@@ -27,7 +27,6 @@ class UIMainViewController extends Component<{}, {}, State> {
   }
 
   render(): ?ReactElement {
-    console.info(this.state.users.size)
     return (
       <main>
         <h1>Performance Testing</h1>
@@ -78,23 +77,26 @@ class MainSection extends Component {
       {label: "Name", ref: "name", name: "name", value: this.state.name},
       {label: "Email", ref: "email", name: "email", value: this.state.email},
       {label: "Avatar", ref: "avatar", name: "avatar", value: this.state.avatar}
-    ]
+    ];
+
+    const userList = [];
+    for (let [id, user] of this.props.users) {
+      userList.push(
+        <li key={id}>
+          <span style={{display: "block"}}>Name: {user.get("name")}</span>
+          <span style={{display: "block"}}>Email: {user.get("email")}</span>
+          <span style={{display: "block"}}>avatar: {user.get("avatar")}</span>
+          <span style={{display: "block"}}>id: {user.get("id")}</span>
+        </li>
+      )
+    }
 
     return (
       <section>
         <div className="user-list">
           <h3>List of users</h3>
           <ul>
-            {this.props.users.map((user) => {
-              return (
-                <li>
-                  <span style={{display: "block"}}>Name: {user.get("name")}</span>
-                  <span style={{display: "block"}}>Email: {user.get("email")}</span>
-                  <span style={{display: "block"}}>avatar: {user.get("avatar")}</span>
-                  <span style={{display: "block"}}>id: {user.get("id")}</span>
-                </li>
-              )
-            })}
+            {userList}
           </ul>
         </div>
         <form onSubmit={this._onSubmit.bind(this)}>
@@ -105,7 +107,7 @@ class MainSection extends Component {
                 <label style={{display: "block"}}>{input.label}</label>
                 <input
                   type="text"
-                  value={this.state.value}
+                  value={input.value}
                   onChange={this._onChange(input.name)} />
               </div>
             )
