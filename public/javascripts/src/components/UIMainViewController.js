@@ -42,28 +42,62 @@ class TextInput extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: this.props.value || ""
+      value: this.props.value || "",
+      errorStyle: "",
+      errorMsg: "",
+      isValid: this.props.isValid
     }
   }
 
-  componentDidMount() {
-    var el = React.finDOMNode(this.refs.input)
-  }
-
   render() {
+    var errorMsg;
+    if (this.state.errorMsg) {
+      errorMsg = <div>{this.state.errorMsg}</div>
+    }
     return (
       <div className="input-group">
         <label style={{display: "block"}}>{this.props.label}</label>
         <input
+          style={{"borderColor": this.state.errorStyle}}
           type="text"
           value={this.props.value}
           name={this.props.name}
-          onBlur={this.props.onBlur}
-          ref="input"
-          onChange={this.props.onChange} />
+          onBlur={this._validate.bind(this)}
+          onChange={this.props.onChange.bind(this)} />
+        {errorMsg}
       </div>
     )
   }
+
+  _validate(e) {
+    switch(this.props.type) {
+      case "number":
+        if (_.isNumeric(e.target.value) == false) {
+          this.setState({
+            errorStyle: "red",
+            errorMsg: "Only Number is allowed",
+            isValid: false
+          })
+        } else {
+          this.setState({errorStyle: "", errorMsg: "", isValid: true})
+        }
+      break;
+      case "email":
+        var regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i
+        if (!regex.test(e.target.value)) {
+          this.setState({
+            errorStyle: "red",
+            errorMsg: "only email is allowed"
+          })
+        } else {
+          this.setState({errorStyle: "", errorMsg: "", isValid: true})
+        }
+      break;
+      default:
+        this.setState({errorStyle: "", errorMsg: "", isValid: true})
+    }
+  }
+
 }
 
 class MainSection extends Component {
@@ -72,14 +106,15 @@ class MainSection extends Component {
     this.state = {
       name: this.props.users.get("name"),
       email: this.props.users.get("email"),
-      avatar: this.props.users.get("avatar")
+      avatar: this.props.users.get("avatar"),
+      isValid: false,
     }
   }
 
   render(): ?ReactElement {
     let inputs: Array<Object> = [
-      {label: "Name", ref: "name", name: "name", type: "required", value: this.state.name},
-      {label: "Email", ref: "email", name: "email", type: "required", value: this.state.email},
+      {label: "Name", ref: "name", name: "name", type: "number", value: this.state.name},
+      {label: "Email", ref: "email", name: "email", type: "email", value: this.state.email},
       {label: "Avatar", ref: "avatar", name: "avatar", type: "required", value: this.state.avatar}
     ];
 
@@ -90,6 +125,7 @@ class MainSection extends Component {
           key={index}
           label={input.label}
           value={input.value}
+          type={input.type}
           onChange={this._onChange(input.name)} />
       )
     })
